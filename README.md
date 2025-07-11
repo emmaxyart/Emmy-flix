@@ -1,4 +1,4 @@
-# 🎬 Emmflix - Netflix Clone
+# 🎬 Emmflix
 
 A modern, feature-rich Netflix clone built with Next.js 15, featuring a beautiful UI, comprehensive search functionality, and full light/dark mode support.
 
@@ -164,20 +164,6 @@ src/
 - **Mobile**: 2 columns
 - **Small screens**: 3 columns
 - **Medium screens**: 4 columns
-- **Large screens**: 5 columns
-- **Extra large**: 6 columns
-
-### **Animation System**
-- **Page transitions**: Smooth entrance animations
-- **Scroll-triggered**: Elements animate when entering viewport
-- **Micro-interactions**: Hover effects and button feedback
-- **Staggered loading**: Sequential animation timing
-
-### **Color Palette**
-- **Primary**: Red (#DC2626) - Netflix-inspired brand color
-- **Light theme**: Gray-50 to Gray-100 gradient backgrounds
-- **Dark theme**: Gray-900 to Black gradient backgrounds
-- **Text**: Proper contrast ratios for accessibility
 
 ## 🔧 Configuration
 
@@ -237,7 +223,6 @@ The application uses TMDB API endpoints:
 - Error handling and loading states
 
 ### **🔒 Disabled Features**
-- User authentication and registration
 - Movie streaming functionality
 - Download capabilities
 - User profiles and preferences
@@ -269,14 +254,6 @@ curl http://localhost:3000/api/test-connection
 - [ ] Search history persists across sessions
 - [ ] Error handling for invalid movie IDs
 - [ ] Loading states display correctly
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
 
 ## 📄 License
 
