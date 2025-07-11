@@ -29,12 +29,18 @@ export async function fetchMovies(endpoint: string, params: Record<string, strin
   const url = `${baseUrl}${endpoint}?${queryParams.toString()}`;
 
   try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
     const response = await fetch(url, {
+      signal: controller.signal,
       next: { revalidate: 3600 },
       headers: {
         'Accept': 'application/json',
       }
     });
+
+    clearTimeout(timeoutId);
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -52,12 +58,14 @@ export async function fetchMovies(endpoint: string, params: Record<string, strin
   } catch (error) {
     console.error('Error fetching movies:', error);
 
-    // Re-throw with more context
-    if (error instanceof Error) {
-      throw new Error(`Movie fetch failed: ${error.message}`);
-    }
-
-    throw new Error('Unknown error occurred while fetching movies');
+    // Return empty results instead of throwing to prevent infinite loading
+    // This allows the app to render even when API calls fail
+    return {
+      results: [],
+      total_pages: 0,
+      total_results: 0,
+      page: 1
+    };
   }
 }
 

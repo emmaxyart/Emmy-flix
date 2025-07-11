@@ -5,11 +5,21 @@ import Link from "next/link";
 
 export default async function Home() {
   try {
+    // Add timeout to prevent infinite loading
+    const fetchWithTimeout = (promise: Promise<any>, timeout = 15000) => {
+      return Promise.race([
+        promise,
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('Request timeout')), timeout)
+        )
+      ]);
+    };
+
     const [trending, popular, topRated, upcoming] = await Promise.all([
-      fetchMovies(movieEndpoints.trending),
-      fetchMovies(movieEndpoints.popular),
-      fetchMovies(movieEndpoints.topRated),
-      fetchMovies(movieEndpoints.upcoming),
+      fetchWithTimeout(fetchMovies(movieEndpoints.trending)),
+      fetchWithTimeout(fetchMovies(movieEndpoints.popular)),
+      fetchWithTimeout(fetchMovies(movieEndpoints.topRated)),
+      fetchWithTimeout(fetchMovies(movieEndpoints.upcoming)),
     ]);
 
     return (
