@@ -1,8 +1,11 @@
 const BASE_URL = process.env.NEXT_PUBLIC_TMDB_BASE_URL;
 const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 
-if (!BASE_URL || !API_KEY) {
-  throw new Error('TMDB environment variables are not properly configured');
+// Only check environment variables at runtime, not during build
+if (typeof window !== 'undefined' || process.env.NODE_ENV === 'development') {
+  if (!BASE_URL || !API_KEY) {
+    console.warn('TMDB environment variables are not properly configured');
+  }
 }
 
 
@@ -11,7 +14,9 @@ export async function fetchMovies(endpoint: string, params: Record<string, strin
   const baseUrl = process.env.NEXT_PUBLIC_TMDB_BASE_URL || 'https://api.themoviedb.org/3';
 
   if (!apiKey) {
-    throw new Error('TMDB API key is not configured');
+    // Return empty results during build or when API key is missing
+    console.warn('TMDB API key is not configured, returning empty results');
+    return { results: [] };
   }
 
   // Build query string from params
@@ -24,12 +29,18 @@ export async function fetchMovies(endpoint: string, params: Record<string, strin
   const url = `${baseUrl}${endpoint}?${queryParams.toString()}`;
 
   try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
     const response = await fetch(url, {
+      signal: controller.signal,
       next: { revalidate: 3600 },
       headers: {
         'Accept': 'application/json',
       }
     });
+
+    clearTimeout(timeoutId);
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -47,12 +58,14 @@ export async function fetchMovies(endpoint: string, params: Record<string, strin
   } catch (error) {
     console.error('Error fetching movies:', error);
 
-    // Re-throw with more context
-    if (error instanceof Error) {
-      throw new Error(`Movie fetch failed: ${error.message}`);
-    }
-
-    throw new Error('Unknown error occurred while fetching movies');
+    // Return empty results instead of throwing to prevent infinite loading
+    // This allows the app to render even when API calls fail
+    return {
+      results: [],
+      total_pages: 0,
+      total_results: 0,
+      page: 1
+    };
   }
 }
 

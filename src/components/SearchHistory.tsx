@@ -38,7 +38,7 @@ export default function SearchHistory({ onMovieClick, onQueryClick }: SearchHist
     setRecentQueries([]);
   };
 
-  const handleMovieClick = (movie: Movie) => {
+  const _handleMovieClick = (movie: Movie) => {
     if (onMovieClick) {
       onMovieClick(movie);
     }

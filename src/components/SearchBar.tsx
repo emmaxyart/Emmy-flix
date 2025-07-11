@@ -9,10 +9,9 @@ interface SearchBarProps {
   onSearch: (query: string) => void;
   onResults: (results: Movie[]) => void;
   placeholder?: string;
-  onMovieSelect?: (movie: Movie, query: string) => void;
 }
 
-export default function SearchBar({ onSearch, onResults, placeholder = "Search movies...", onMovieSelect }: SearchBarProps) {
+export default function SearchBar({ onSearch, onResults, placeholder = "Search movies..." }: SearchBarProps) {
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -133,3 +132,4 @@ export default function SearchBar({ onSearch, onResults, placeholder = "Search m
     </motion.div>
   );
 }
+
