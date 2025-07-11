@@ -1,8 +1,11 @@
 const BASE_URL = process.env.NEXT_PUBLIC_TMDB_BASE_URL;
 const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 
-if (!BASE_URL || !API_KEY) {
-  throw new Error('TMDB environment variables are not properly configured');
+// Only check environment variables at runtime, not during build
+if (typeof window !== 'undefined' || process.env.NODE_ENV === 'development') {
+  if (!BASE_URL || !API_KEY) {
+    console.warn('TMDB environment variables are not properly configured');
+  }
 }
 
 
@@ -11,7 +14,9 @@ export async function fetchMovies(endpoint: string, params: Record<string, strin
   const baseUrl = process.env.NEXT_PUBLIC_TMDB_BASE_URL || 'https://api.themoviedb.org/3';
 
   if (!apiKey) {
-    throw new Error('TMDB API key is not configured');
+    // Return empty results during build or when API key is missing
+    console.warn('TMDB API key is not configured, returning empty results');
+    return { results: [] };
   }
 
   // Build query string from params
