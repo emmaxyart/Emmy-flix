@@ -1,0 +1,40 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Removed invalid prisma-optimize generator
+
+model Subscription {
+  id            String   @id @default(cuid())
+  userId        String   // User ID as string (no foreign key since User model removed)
+  status        String   // "active" or "inactive"
+  allowDownloads Boolean @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model StreamingActivity {
+  id        String   @id @default(cuid())
+  userId    String   // User ID as string (no foreign key since User model removed)
+  movieId   String
+  timestamp DateTime @default(now())
+}
+
+model DownloadActivity {
+  id        String   @id @default(cuid())
+  userId    String   // User ID as string (no foreign key since User model removed)
+  movieId   String
+  timestamp DateTime @default(now())
+}
+
+// Authentication models removed - auth system disabled
+
+
