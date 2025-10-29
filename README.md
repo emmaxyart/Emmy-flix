@@ -11,8 +11,6 @@ A modern, feature-rich Netflix clone built with Next.js 15, featuring a beautifu
 ## ✨ Features
 
 ### 🎥 **Movie Experience**
-- **Hero Jumbotrons**: Stunning auto-rotating showcases for each movie category
-- **Multiple Movie Sections**: Trending, Popular, Top Rated, and Upcoming movies
 - **Detailed Movie Pages**: Complete movie information with trailers and metadata
 - **Responsive Design**: Optimized for all devices from mobile to desktop
 - **High-Quality Images**: TMDB integration for movie posters and backdrops
@@ -22,7 +20,6 @@ A modern, feature-rich Netflix clone built with Next.js 15, featuring a beautifu
 - **Search History**: Persistent search history with localStorage
 - **Recent Searches**: Quick access to previously searched terms
 - **Visual Search Results**: Grid layout with movie posters and details
-- **Search Analytics**: Track and display search result counts
 
 ### 🎨 **Modern UI/UX**
 - **Light/Dark Mode**: Complete theme switching with smooth transitions
@@ -140,12 +137,6 @@ src/
 
 ## 🎯 Key Components
 
-### **Jumbotron Component**
-- **Auto-rotating hero sections** for each movie category
-- **Configurable heights**: Small, medium, and large variants
-- **Interactive controls**: Optional action buttons and movie indicators
-- **Theme-aware overlays**: Proper contrast in both light and dark modes
-
 ### **Search System**
 - **SearchBar**: Real-time search with loading states and animations
 - **SearchHistory**: Persistent history with visual movie grid
@@ -189,9 +180,6 @@ DATABASE_URL=postgresql://user:password@localhost:5432/emmflix
 ### **API Endpoints**
 The application uses TMDB API endpoints:
 - `/trending/movie/week` - Trending movies
-- `/movie/popular` - Popular movies
-- `/movie/top_rated` - Top rated movies
-- `/movie/upcoming` - Upcoming releases
 - `/movie/{id}` - Movie details
 - `/movie/{id}/videos` - Movie trailers
 - `/search/movie` - Movie search
@@ -221,13 +209,6 @@ The application uses TMDB API endpoints:
 - TMDB API integration
 - TypeScript implementation
 - Error handling and loading states
-
-### **🔒 Disabled Features**
-- Movie streaming functionality
-- Download capabilities
-- User profiles and preferences
-- Rate limiting (Redis integration)
-- Database operations (Prisma)
 
 ### **🎯 Future Enhancements**
 - User authentication system
@@ -264,7 +245,7 @@ This project is for educational purposes. Movie data provided by [The Movie Data
 - **TMDB** for providing the movie database API
 - **Netflix** for design inspiration
 - **Vercel** for hosting and deployment platform
-- **Next.js team** for the amazing framework
+- **Next.js ** for the amazing framework
 - **Tailwind CSS** for the utility-first CSS framework
 - **Framer Motion** for smooth animations
 
@@ -273,9 +254,9 @@ This project is for educational purposes. Movie data provided by [The Movie Data
 - **Developer**: Emmanuel Edobor
 - **Email**: emmanueledobor34@gmail.com
 - **Phone**: 09037441641
-- **Version**: 1.0.0
+- **Version**: 0.1
 
 ---
 
-Built with ❤️ using Next.js and modern web technologies.
+Built with ❤️ 
 
