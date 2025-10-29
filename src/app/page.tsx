@@ -1,67 +1,66 @@
-import { fetchMovies, movieEndpoints } from "@/services/movieService";
-import HomePageClient from "@/components/HomePageClient";
-import Header from "@/components/Header";
-import Link from "next/link";
+"use client";
 
-export default async function Home() {
-  try {
-    // Add timeout to prevent infinite loading
-    const fetchWithTimeout = (promise: Promise<any>, timeout = 15000) => {
-      return Promise.race([
-        promise,
-        new Promise((_, reject) =>
-          setTimeout(() => reject(new Error('Request timeout')), timeout)
-        )
-      ]);
-    };
+import { useEffect, useState } from 'react';
+import MovieList from '../components/MovieList';
+import Header from "../components/Header";
+import { fetchMovies } from '@/services/movieService';
 
-    const [trending, popular, topRated, upcoming] = await Promise.all([
-      fetchWithTimeout(fetchMovies(movieEndpoints.trending)),
-      fetchWithTimeout(fetchMovies(movieEndpoints.popular)),
-      fetchWithTimeout(fetchMovies(movieEndpoints.topRated)),
-      fetchWithTimeout(fetchMovies(movieEndpoints.upcoming)),
-    ]);
+const BASE_URL = process.env.NEXT_PUBLIC_TMDB_BASE_URL;
+const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 
+export default function Home() {
+  const [movies, setMovies] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    async function loadMovies() {
+      try {
+        setLoading(true);
+        const response = await fetch(
+          `${BASE_URL}/trending/movie/week?api_key=${API_KEY}`
+        );
+        const data = await response.json();
+        setMovies(data.results);
+        setError(null);
+      } catch (err) {
+        console.error('Error fetching movies:', err);
+        setError('Failed to load movies');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadMovies();
+  }, []);
+
+  if (loading) {
     return (
-      <>
-        <Header />
-        <HomePageClient
-          trending={trending?.results || []}
-          popular={popular?.results || []}
-          topRated={topRated?.results || []}
-          upcoming={upcoming?.results || []}
-        />
-      </>
-    );
-  } catch (error) {
-    console.error('Error loading home page:', error);
-    return (
-      <>
-        <div className="noise" />
-        <Header />
-        <main className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-black flex items-center justify-center px-4 transition-colors duration-300">
-          <div className="text-center max-w-md mx-auto">
-            <div className="text-red-500 text-4xl md:text-6xl mb-4">🎬</div>
-            <h1 className="text-2xl md:text-4xl font-bold text-red-600 mb-4">Oops! Something went wrong</h1>
-            <p className="text-gray-600 dark:text-gray-400 mb-8 text-sm md:text-base transition-colors duration-300">
-              We're having trouble loading the movies. This might be due to API configuration issues.
-            </p>
-            <div className="space-y-4">
-              <Link
-                href="/"
-                className="block bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg transition-colors text-sm md:text-base"
-              >
-                Refresh Page
-              </Link>
-              <p className="text-xs md:text-sm text-gray-500 dark:text-gray-500 break-words">
-                Error: {error instanceof Error ? error.message : 'Unknown error'}
-              </p>
-            </div>
-          </div>
-        </main>
-      </>
+      <div className="flex justify-center items-center h-screen bg-gray-900">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-600"></div>
+      </div>
     );
   }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-gray-900">
+        <div className="text-red-500">Error: {error}</div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-900">
+      <Header />
+      <div className="container mx-auto px-4 py-8">
+        <section>
+          <h2 className="text-2xl font-bold text-white mb-4">Trending Movies</h2>
+          <MovieList movies={movies} />
+        </section>
+      </div>
+    </div>
+  );
 }
 
 
