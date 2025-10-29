@@ -3,15 +3,16 @@
 import { useEffect, useState } from 'react';
 import MovieList from '../components/MovieList';
 import Header from "../components/Header";
-import { fetchMovies } from '@/services/movieService';
+import Categories from '@/components/Categories';
+import { Movie } from '@/types/movie';
 
 const BASE_URL = process.env.NEXT_PUBLIC_TMDB_BASE_URL;
 const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 
 export default function Home() {
-  const [movies, setMovies] = useState([]);
+  const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null); // Fixed type here
 
   useEffect(() => {
     async function loadMovies() {
@@ -25,7 +26,7 @@ export default function Home() {
         setError(null);
       } catch (err) {
         console.error('Error fetching movies:', err);
-        setError('Failed to load movies');
+        setError('Failed to load movies'); // Now this works with the correct type
       } finally {
         setLoading(false);
       }
@@ -53,11 +54,12 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-900">
       <Header />
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 space-y-12">
         <section>
           <h2 className="text-2xl font-bold text-white mb-4">Trending Movies</h2>
           <MovieList movies={movies} />
         </section>
+        <Categories />
       </div>
     </div>
   );

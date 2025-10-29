@@ -3,10 +3,10 @@ export interface Movie {
   title: string;
   poster_path: string | null;
   backdrop_path: string | null;
+  vote_average: number;
   overview: string;
   release_date: string;
-  vote_average: number;
-  // Add other fields as needed
+  adult: boolean;
 }
 
 export interface MovieResponse {
